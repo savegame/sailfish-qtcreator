@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 - 2014 Jolla Ltd.
+** Copyright (C) 2019 Jolla Ltd.
 ** Contact: http://jolla.com/
 **
 ** This file is part of Qt Creator.
@@ -20,37 +20,50 @@
 **
 ****************************************************************************/
 
-#ifndef MERSDKSELECTIONDIALOG_H
-#define MERSDKSELECTIONDIALOG_H
+#ifndef MERCOMMANDSERIALIZER_H
+#define MERCOMMANDSERIALIZER_H
 
-#include <QDialog>
+#include <QObject>
+#include <QBasicTimer>
+#include <QQueue>
+
+class QProcess;
 
 namespace Mer {
 namespace Internal {
 
-namespace Ui {
-class MerSdkSelectionDialog;
-}
-
-class MerSdkSelectionDialog : public QDialog
+class MerCommandSerializer : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit MerSdkSelectionDialog(QWidget *parent = 0);
-    ~MerSdkSelectionDialog() override;
+    explicit MerCommandSerializer(QObject *parent);
 
-    QString selectedSdkName() const;
+    ~MerCommandSerializer() override;
 
-    int selectedSdkType() const;
-private slots:
-    void handleItemSelectionChanged();
-    void handleItemDoubleClicked();
+    bool runSynchronous(QProcess *process);
+
+    void runAsynchronous(QProcess *process);
+
+protected:
+    void timerEvent(QTimerEvent *event) override;
 
 private:
-    Ui::MerSdkSelectionDialog *m_ui;
+    void scheduleDequeue();
+
+    void dequeue();
+
+private slots:
+    void finalize();
+
+private:
+    QQueue<QProcess *> m_queue;
+    QProcess *m_current{};
+    QBasicTimer m_dequeueTimer;
 };
 
-} // Internal
-} // Mer
 
-#endif // MER_SDKSELECTIONDIALOG_H
+}
+}
+
+#endif // MERCOMMANDSERIALIZER_H

@@ -37,6 +37,8 @@ namespace Utils {
 namespace Mer {
 namespace Internal {
 
+class MerCommandSerializer;
+    
 class VirtualMachineInfo
 {
 public:
@@ -58,7 +60,7 @@ class MerVirtualBoxManager : public QObject
 {
     Q_OBJECT
 public:
-    MerVirtualBoxManager(QObject *parent = 0);
+    MerVirtualBoxManager(QObject *parent = nullptr);
     static MerVirtualBoxManager* instance();
     ~MerVirtualBoxManager() override;
     static void isVirtualMachineRunning(const QString &vmName, QObject *context,
@@ -77,6 +79,7 @@ public:
 
 private:
     static MerVirtualBoxManager *m_instance;
+    MerCommandSerializer* m_serializer = nullptr;
 };
 
 } // Internal

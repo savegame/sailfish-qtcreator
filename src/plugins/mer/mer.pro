@@ -95,7 +95,10 @@ SOURCES += \
     merdevicemodelcombobox.cpp \
     meremulatormodeoptionspage.cpp \
     meremulatormodeoptionswidget.cpp \
-    meremulatormodedetailswidget.cpp
+    meremulatormodedetailswidget.cpp \
+    merdockermanager.cpp \
+    mercommandserializer.cpp \
+    mercommandprocess.cpp
 
 HEADERS += \
     merabstractvmstartstep.h \
@@ -160,7 +163,10 @@ HEADERS += \
     merdevicemodelcombobox.h \
     meremulatormodeoptionspage.h \
     meremulatormodeoptionswidget.h \
-    meremulatormodedetailswidget.h
+    meremulatormodedetailswidget.h \
+    merdockermanager.h \
+    mercommandserializer.h \
+    mercommandprocess.h
 
 contains(QT_CONFIG, webkit)|contains(QT_MODULES, webkit) {
     QT += webkit

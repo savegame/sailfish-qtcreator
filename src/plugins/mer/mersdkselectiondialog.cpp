@@ -25,6 +25,7 @@
 
 #include "merconnection.h"
 #include "mervirtualboxmanager.h"
+#include "merdockermanager.h"
 
 #include <QListWidgetItem>
 #include <QPushButton>
@@ -43,7 +44,15 @@ MerSdkSelectionDialog::MerSdkSelectionDialog(QWidget *parent)
     foreach (const QString &vm, registeredVMs) {
         // add only unused machines
         if (!usedVMs.contains(vm)) {
-            new QListWidgetItem(vm, m_ui->virtualMachineListWidget);
+            new QListWidgetItem(vm, m_ui->virtualMachineListWidget, QListWidgetItem::UserType);
+        }
+    }
+
+    MerDockerManager dockerManager;
+    const QStringList availableImages = dockerManager.fetchImages();
+    foreach (const QString &dockerImage, availableImages) {
+        if (!usedVMs.contains(dockerImage)) {
+            new QListWidgetItem(dockerImage, m_ui->virtualMachineListWidget, QListWidgetItem::UserType + 1);
         }
     }
 
@@ -83,6 +92,14 @@ QString MerSdkSelectionDialog::selectedSdkName() const
     if (selected.isEmpty())
         return QString();
     return selected.at(0)->data(Qt::DisplayRole).toString();
+}
+
+int MerSdkSelectionDialog::selectedSdkType() const
+{
+    QList<QListWidgetItem *> selected = m_ui->virtualMachineListWidget->selectedItems();
+    if (selected.isEmpty())
+        return -1;
+    return selected.at(0)->type();
 }
 
 } // Internal
