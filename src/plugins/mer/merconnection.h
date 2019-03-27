@@ -41,6 +41,7 @@ QT_END_NAMESPACE
 namespace Mer {
 namespace Internal {
 
+class MerAbstractVMManager;
 class MerConnectionRemoteShutdownProcess;
 
 class MerConnection : public QObject
@@ -97,6 +98,8 @@ public:
     MerConnection(Ui *ui, QObject *parent);
     ~MerConnection() override;
 
+    void setVMType(const QString &vmType);
+    QString vmType() const;
     void setVirtualMachine(const QString &virtualMachine);
     void setSshParameters(const QSsh::SshConnectionParameters &sshParameters);
     void setHeadless(bool headless);
@@ -222,6 +225,7 @@ private:
 
     Ui *m_ui;
     QPointer<MerConnectionRemoteShutdownProcess> m_remoteShutdownProcess;
+    MerAbstractVMManager* m_manager;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MerConnection::ConnectOptions)

@@ -26,6 +26,7 @@
 #include "merconstants.h"
 #include "merdevicefactory.h"
 #include "merdevicexmlparser.h"
+#include "merdockermanager.h"
 #include "meremulatordevice.h"
 #include "merhardwaredevice.h"
 #include "merlogging.h"
@@ -509,11 +510,16 @@ void MerSdkManager::removeSdk(MerSdk *sdk)
 }
 
 //ownership passed to caller
-MerSdk* MerSdkManager::createSdk(const QString &vmName)
+MerSdk* MerSdkManager::createSdk(const QString &vmName, const QString &type)
 {
+    VirtualMachineInfo info;
+    if (type == QLatin1String(MerDockerManager::TYPE)) {
+        info = MerDockerManager::fetchVirtualMachineInfo(vmName);
+    } else {
+        info = MerVirtualBoxManager::fetchVirtualMachineInfo(vmName);
+    }
     MerSdk *sdk = new MerSdk();
-
-    VirtualMachineInfo info = MerVirtualBoxManager::fetchVirtualMachineInfo(vmName);
+    sdk->setBuildEngineType(type);
     sdk->setVirtualMachineName(vmName);
     sdk->setSshPort(info.sshPort);
     sdk->setWwwPort(info.wwwPort);
@@ -787,7 +793,7 @@ void MerPlugin::testMerSdkManager()
     QVERIFY2(QFile::copy(initFile, targetFile), "Could not copy init.xml to target.xml");
 
     QVERIFY(MerSdkManager::sdks().isEmpty());
-    MerSdk *sdk = MerSdkManager::createSdk(virtualMachine);
+    MerSdk *sdk = MerSdkManager::createSdk(virtualMachine, QString());
     QVERIFY(sdk);
     QVERIFY(!sdk->isValid());
 

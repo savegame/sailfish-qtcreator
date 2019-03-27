@@ -44,7 +44,7 @@ MerSdkSelectionDialog::MerSdkSelectionDialog(QWidget *parent)
     foreach (const QString &vm, registeredVMs) {
         // add only unused machines
         if (!usedVMs.contains(vm)) {
-            new QListWidgetItem(vm, m_ui->virtualMachineListWidget, QListWidgetItem::UserType);
+            new QListWidgetItem(vm, m_ui->virtualMachineListWidget);
         }
     }
 
@@ -52,7 +52,8 @@ MerSdkSelectionDialog::MerSdkSelectionDialog(QWidget *parent)
     const QStringList availableImages = dockerManager.fetchImages();
     foreach (const QString &dockerImage, availableImages) {
         if (!usedVMs.contains(dockerImage)) {
-            new QListWidgetItem(dockerImage, m_ui->virtualMachineListWidget, QListWidgetItem::UserType + 1);
+            QListWidgetItem *item = new QListWidgetItem(dockerImage, m_ui->virtualMachineListWidget);
+            item->setData(Qt::UserRole, QLatin1String("docker"));
         }
     }
 
@@ -94,12 +95,12 @@ QString MerSdkSelectionDialog::selectedSdkName() const
     return selected.at(0)->data(Qt::DisplayRole).toString();
 }
 
-int MerSdkSelectionDialog::selectedSdkType() const
+QString MerSdkSelectionDialog::selectedSdkType() const
 {
     QList<QListWidgetItem *> selected = m_ui->virtualMachineListWidget->selectedItems();
     if (selected.isEmpty())
-        return -1;
-    return selected.at(0)->type();
+        return QString();
+    return selected.at(0)->data(Qt::UserRole).toString();
 }
 
 } // Internal

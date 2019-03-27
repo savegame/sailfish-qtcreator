@@ -23,6 +23,8 @@
 #ifndef VIRTUALBOXMANAGER_H
 #define VIRTUALBOXMANAGER_H
 
+#include "merabstractvmmanager.h"
+
 #include <functional>
 
 #include <QHash>
@@ -39,35 +41,21 @@ namespace Internal {
 
 class MerCommandSerializer;
     
-class VirtualMachineInfo
-{
-public:
-    VirtualMachineInfo() : sshPort(0), wwwPort(0), headless(false) {}
-    QString sharedHome;
-    QString sharedTargets;
-    QString sharedConfig;
-    QString sharedSrc;
-    QString sharedSsh;
-    quint16 sshPort;
-    quint16 wwwPort;
-    QList<quint16> freePorts;
-    QList<quint16> qmlLivePorts;
-    QStringList macs;
-    bool headless;
-};
 
-class MerVirtualBoxManager : public QObject
+
+class MerVirtualBoxManager : public MerAbstractVMManager
 {
     Q_OBJECT
 public:
     MerVirtualBoxManager(QObject *parent = nullptr);
+    QString type() const override;
     static MerVirtualBoxManager* instance();
     ~MerVirtualBoxManager() override;
-    static void isVirtualMachineRunning(const QString &vmName, QObject *context,
-                                        std::function<void(bool,bool)> slot);
+    void isVirtualMachineRunning(const QString &vmName, QObject *context,
+                                 std::function<void(bool,bool)> slot) override;
     static QStringList fetchRegisteredVirtualMachines();
     static VirtualMachineInfo fetchVirtualMachineInfo(const QString &vmName);
-    static void startVirtualMachine(const QString &vmName, bool headless);
+    void startVirtualMachine(const QString &vmName, bool headless) override;
     static void shutVirtualMachine(const QString &vmName);
     static bool updateSharedFolder(const QString &vmName, const QString &mountName, const QString &newFolder);
     static bool updateSdkSshPort(const QString &vmName, quint16 port);
@@ -80,6 +68,9 @@ public:
 private:
     static MerVirtualBoxManager *m_instance;
     MerCommandSerializer* m_serializer = nullptr;
+
+public:
+    constexpr static const char TYPE[] = "vbox";
 };
 
 } // Internal

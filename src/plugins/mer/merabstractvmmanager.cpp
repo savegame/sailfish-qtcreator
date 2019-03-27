@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 - 2014 Jolla Ltd.
+** Copyright (C) 2019 Jolla Ltd.
 ** Contact: http://jolla.com/
 **
 ** This file is part of Qt Creator.
@@ -20,37 +20,14 @@
 **
 ****************************************************************************/
 
-#ifndef MERSDKSELECTIONDIALOG_H
-#define MERSDKSELECTIONDIALOG_H
-
-#include <QDialog>
-
+#include "merabstractvmmanager.h"
 namespace Mer {
 namespace Internal {
 
-namespace Ui {
-class MerSdkSelectionDialog;
+MerAbstractVMManager::MerAbstractVMManager(QObject *parent) : QObject(parent)
+{
+
 }
 
-class MerSdkSelectionDialog : public QDialog
-{
-    Q_OBJECT
-public:
-    explicit MerSdkSelectionDialog(QWidget *parent = 0);
-    ~MerSdkSelectionDialog() override;
-
-    QString selectedSdkName() const;
-
-    QString selectedSdkType() const;
-private slots:
-    void handleItemSelectionChanged();
-    void handleItemDoubleClicked();
-
-private:
-    Ui::MerSdkSelectionDialog *m_ui;
-};
-
-} // Internal
-} // Mer
-
-#endif // MER_SDKSELECTIONDIALOG_H
+}
+}

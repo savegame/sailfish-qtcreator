@@ -98,7 +98,8 @@ SOURCES += \
     meremulatormodedetailswidget.cpp \
     merdockermanager.cpp \
     mercommandserializer.cpp \
-    mercommandprocess.cpp
+    mercommandprocess.cpp \
+    merabstractvmmanager.cpp
 
 HEADERS += \
     merabstractvmstartstep.h \
@@ -166,7 +167,8 @@ HEADERS += \
     meremulatormodedetailswidget.h \
     merdockermanager.h \
     mercommandserializer.h \
-    mercommandprocess.h
+    mercommandprocess.h \
+    merabstractvmmanager.h
 
 contains(QT_CONFIG, webkit)|contains(QT_MODULES, webkit) {
     QT += webkit

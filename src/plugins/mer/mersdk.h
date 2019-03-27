@@ -56,6 +56,9 @@ public:
     bool isAutoDetected() const;
     void setAutodetect(bool autoDetected);
 
+    void setBuildEngineType(const QString& type);
+    QString buildEngineType() const;
+
     void setVirtualMachineName(const QString &name);
     QString virtualMachineName() const;
 
@@ -128,7 +131,7 @@ private slots:
     void onConnectionStateChanged();
 
 private:
-    explicit MerSdk(QObject *parent = 0);
+    explicit MerSdk( QObject *parent = 0);
     QList<MerTarget> readTargets(const Utils::FileName &fileName);
     bool addTarget(const MerTarget &target);
     bool removeTarget(const MerTarget &target);

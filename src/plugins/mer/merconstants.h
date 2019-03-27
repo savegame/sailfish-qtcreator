@@ -94,6 +94,7 @@ const char MER_DEVICE_MODEL_NAME[] = "MerDeviceModel.Name";
 const char MER_DEVICE_MODEL_DISPLAY_RESOLUTION[] = "MerDeviceModel.DisplayResolution";
 const char MER_DEVICE_MODEL_DISPLAY_SIZE[] = "MerDeviceModel.DisplaySize";
 const char MER_DEVICE_MODEL_DCONF_DB[] = "MerDeviceModel.DconfDb";
+const char ENGINE_TYPE[] = "BuildEngineType";
 const char VM_NAME[] = "VirtualMachineName";
 const char SHARED_HOME[] = "SharedHome";
 const char SHARED_TARGET[] = "SharedTarget";

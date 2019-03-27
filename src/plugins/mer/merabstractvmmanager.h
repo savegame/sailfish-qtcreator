@@ -20,41 +20,52 @@
 **
 ****************************************************************************/
 
-#ifndef MERDOCKERMANAGER_H
-#define MERDOCKERMANAGER_H
+#ifndef MERABSRACTVMMANAGER_H
+#define MERABSRACTVMMANAGER_H
 
 #include <QObject>
 
-#include "merabstractvmmanager.h"
+#include <functional>
+
 
 namespace Mer {
 namespace Internal {
 
-class MerCommandSerializer;
+class VirtualMachineInfo
+{
+public:
+    VirtualMachineInfo() : sshPort(0), wwwPort(0), headless(false) {}
+    QString sharedHome;
+    QString sharedTargets;
+    QString sharedConfig;
+    QString sharedSrc;
+    QString sharedSsh;
+    quint16 sshPort;
+    quint16 wwwPort;
+    QList<quint16> freePorts;
+    QList<quint16> qmlLivePorts;
+    QStringList macs;
+    bool headless;
+};
 
-class MerDockerManager : public MerAbstractVMManager
+class MerAbstractVMManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit MerDockerManager(QObject *parent = nullptr);
-    QString type() const override;
+    explicit MerAbstractVMManager(QObject *parent = nullptr);
 
-    QStringList fetchImages();
-    static VirtualMachineInfo fetchVirtualMachineInfo(const QString &imageName);
-    void isVirtualMachineRunning(const QString &vmName, QObject *context,
-                                 std::function<void(bool,bool)> slot) override;
-    void startVirtualMachine(const QString &vmName, bool headless) override;
+    virtual QString type() const = 0;
+
+    virtual void isVirtualMachineRunning(const QString &vmName, QObject *context,
+                                         std::function<void(bool,bool)> slot) = 0;
+    virtual void startVirtualMachine(const QString &vmName, bool headless) = 0;
+
 signals:
 
 public slots:
-
-private:
-    static bool isContainerRunningFromList(const QString& containerList,
-                                           const QString& container);
-    MerCommandSerializer* m_serializer = nullptr;
-public:
-    constexpr static const char TYPE[] = "docker";
 };
+
 }
 }
-#endif // MERDOCKERMANAGER_H
+
+#endif // MERABSRACTVMMANAGER_H

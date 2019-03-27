@@ -66,7 +66,7 @@ public:
     ~MerSdkManager() override;
     static QList<MerSdk*> sdks();
     static MerSdk* sdk(const QString &virtualMachineName);
-    static MerSdk* createSdk(const QString &vmName);
+    static MerSdk* createSdk(const QString &vmName, const QString &type);
     static void addSdk(MerSdk *sdk);
     static void removeSdk(MerSdk *sdk);
     static void restoreSdks();

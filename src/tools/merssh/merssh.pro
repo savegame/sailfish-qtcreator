@@ -23,6 +23,7 @@ SOURCES = \
     wwwproxycommand.cpp \
     ../../plugins/mer/merconnection.cpp \
     ../../plugins/mer/merlogging.cpp \
+    ../../plugins/mer/merabstractvmmanager.cpp \
     ../../plugins/mer/mervirtualboxmanager.cpp \
     ../../plugins/mer/merdockermanager.cpp \
     ../../plugins/mer/mercommandserializer.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     wwwproxycommand.h \
     ../../plugins/mer/merconnection.h \
     ../../plugins/mer/merlogging.h \
+    ../../plugins/mer/merabstractvmmanager.h \
     ../../plugins/mer/mervirtualboxmanager.h \
     ../../plugins/mer/merdockermanager.h \
     ../../plugins/mer/mercommandserializer.h \

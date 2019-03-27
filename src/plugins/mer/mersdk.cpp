@@ -110,6 +110,16 @@ void MerSdk::setAutodetect(bool autoDetected)
     m_autoDetected = autoDetected;
 }
 
+void MerSdk::setBuildEngineType(const QString &type)
+{
+    m_connection->setVMType(type);
+}
+
+QString MerSdk::buildEngineType() const
+{
+    return m_connection->vmType();
+}
+
 void MerSdk::setVirtualMachineName(const QString &name)
 {
     m_connection->setVirtualMachine(name);
@@ -370,6 +380,7 @@ MerConnection *MerSdk::connection() const
 QVariantMap MerSdk::toMap() const
 {
     QVariantMap result;
+    result.insert(QLatin1String(ENGINE_TYPE), buildEngineType());
     result.insert(QLatin1String(VM_NAME), virtualMachineName());
     result.insert(QLatin1String(AUTO_DETECTED), isAutoDetected());
     result.insert(QLatin1String(SHARED_HOME), sharedHomePath());
@@ -403,6 +414,7 @@ QVariantMap MerSdk::toMap() const
 
 bool MerSdk::fromMap(const QVariantMap &data)
 {
+    setBuildEngineType(data.value(QLatin1String(ENGINE_TYPE)).toString());
     setVirtualMachineName(data.value(QLatin1String(VM_NAME)).toString());
     setAutodetect(data.value(QLatin1String(AUTO_DETECTED)).toBool());
     setSharedHomePath(data.value(QLatin1String(SHARED_HOME)).toString());

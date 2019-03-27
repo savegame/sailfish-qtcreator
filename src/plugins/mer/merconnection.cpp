@@ -23,6 +23,7 @@
 #include "merconnection.h"
 
 #include "merconstants.h"
+#include "merdockermanager.h"
 #include "merlogging.h"
 #include "mersettings.h"
 #include "mervirtualboxmanager.h"
@@ -257,6 +258,7 @@ MerConnection::MerConnection(Ui *ui, QObject *parent)
     , m_vmWantFastPollState(0)
     , m_pollingVmState(false)
     , m_ui(ui)
+    , m_manager(MerVirtualBoxManager::instance())
 {
     Q_ASSERT(ui);
     m_vmStateEntryTime.start();
@@ -269,6 +271,19 @@ MerConnection::~MerConnection()
         if (--s_usedVmNames[m_vmName] == 0)
             s_usedVmNames.remove(m_vmName);
     }
+}
+
+void MerConnection::setVMType(const QString &vmType)
+{
+    if (vmType == QLatin1String(MerDockerManager::TYPE))
+        m_manager = new MerDockerManager(this);
+    else
+        m_manager = MerVirtualBoxManager::instance();
+}
+
+QString MerConnection::vmType() const
+{
+    return m_manager->type();
 }
 
 void MerConnection::setVirtualMachine(const QString &virtualMachine)
@@ -764,7 +779,7 @@ bool MerConnection::vmStmStep()
             vmWantFastPollState(true);
             m_vmStartingTimeoutTimer.start(VM_START_TIMEOUT, this);
 
-            MerVirtualBoxManager::startVirtualMachine(m_vmName, m_headless);
+            m_manager->startVirtualMachine(m_vmName, m_headless);
         }
 
         if (m_cachedVmRunning) {
@@ -1225,7 +1240,7 @@ void MerConnection::vmPollState(bool async)
             loop->quit();
     };
 
-    MerVirtualBoxManager::isVirtualMachineRunning(m_vmName, this, handler);
+    m_manager->isVirtualMachineRunning(m_vmName, this, handler);
 
     if (!async) {
         loop->exec();

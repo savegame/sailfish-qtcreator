@@ -257,7 +257,7 @@ void MerOptionsWidget::onAddButtonClicked()
     if (m_sdks.contains(dialog.selectedSdkName()))
         return;
 
-    MerSdk* sdk = MerSdkManager::createSdk(dialog.selectedSdkName());
+    MerSdk* sdk = MerSdkManager::createSdk(dialog.selectedSdkName(), dialog.selectedSdkType());
     m_sdks[sdk->virtualMachineName()] = sdk;
     m_virtualMachine = sdk->virtualMachineName();
     update();

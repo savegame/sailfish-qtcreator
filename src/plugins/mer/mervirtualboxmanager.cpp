@@ -83,6 +83,8 @@ const char EMULATOR_SSH_NATPF_RULE_TEMPLATE[] = "guestssh,tcp,127.0.0.1,%1,,22";
 namespace Mer {
 namespace Internal {
 
+constexpr const char MerVirtualBoxManager::TYPE[];
+
 static VirtualMachineInfo virtualMachineInfoFromOutput(const QString &output);
 static bool isVirtualMachineRunningFromInfo(const QString &vmInfo);
 static QStringList listedVirtualMachines(const QString &output);
@@ -137,10 +139,15 @@ static QString vBoxManagePath()
 MerVirtualBoxManager *MerVirtualBoxManager::m_instance = 0;
 
 MerVirtualBoxManager::MerVirtualBoxManager(QObject *parent):
-    QObject(parent)
+    MerAbstractVMManager(parent)
 {
     m_instance = this;
     m_serializer = new MerCommandSerializer(this);
+}
+
+QString MerVirtualBoxManager::type() const
+{
+    return QLatin1String(MerVirtualBoxManager::TYPE);
 }
 
 MerVirtualBoxManager::~MerVirtualBoxManager()
